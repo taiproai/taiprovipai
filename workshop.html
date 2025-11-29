@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop: Làm Chủ Generative AI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Thiết lập font chữ Times New Roman cho toàn bộ trang */
+        body, h1, h2, h3, h4, p, a, button, input, textarea, div, span, label { 
+            font-family: 'Times New Roman', Times, serif !important; 
+        }
+        
+        .bg-hero {
+            background-color: #0d121c;
+            /* Ảnh nền Workshop */
+            background-image: linear-gradient(rgba(13, 18, 28, 0.95), rgba(13, 18, 28, 0.95)), url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1965&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .text-gradient-purple {
+            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Animation cho các phần tử khi cuộn */
+        .animate-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .animate-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                    <i class="fa-solid fa-brain text-indigo-400 text-2xl"></i>
+                    <span class="font-bold text-xl text-white tracking-wider">Generative AI Workshop</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="text-slate-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Giới thiệu</a>
+                        <a href="#topics" class="text-slate-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Nội dung</a>
+                        <a href="#speakers" class="text-slate-400 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Diễn giả</a>
+                        <a href="#register" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:scale-105">
+                            Đăng ký ngay
+                        </a>
+                        <!-- Back link to main site -->
+                        <a href="index.html" class="text-xs text-slate-400 hover:text-white border-l border-slate-600 pl-4">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Trang chủ
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-white/10 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="mobile-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-slate-900 border-b border-white/10" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#about" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/10">Giới thiệu</a>
+                <a href="#topics" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/10">Nội dung</a>
+                <a href="#speakers" onclick="toggleMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-white/10">Diễn giả</a>
+                <a href="index.html" class="block px-3 py-2 text-sm text-slate-500"><i class="fa-solid fa-arrow-left mr-1"></i> Về trang chủ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-hero min-h-screen flex items-center justify-center text-center py-20">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <span class="inline-block py-1 px-3 rounded-full bg-indigo-500/20 border border-indigo-500/50 text-indigo-300 text-sm font-semibold mb-6 animate-pulse animate-scroll">
+                🚀 Sắp diễn ra: 15/12/2025
+            </span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight animate-scroll">
+                Bùng Nổ Tiềm Năng Với <br>
+                <span class="text-gradient-purple">Generative AI</span>
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-xl text-slate-300 mb-10 animate-scroll" style="transition-delay: 0.2s;">
+                Khám phá sức mạnh của ChatGPT, Midjourney và các công cụ AI hàng đầu để đột phá hiệu suất làm việc của bạn ngay hôm nay.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-scroll" style="transition-delay: 0.4s;">
+                <a href="#register" class="px-8 py-4 rounded-full bg-white text-indigo-900 font-bold text-lg hover:bg-slate-100 transition-all shadow-xl shadow-white/10 transform hover:-translate-y-1">
+                    Đặt vé ngay
+                </a>
+                <a href="#about" class="px-8 py-4 rounded-full border border-white/30 text-white font-semibold text-lg hover:bg-white/10 transition-all backdrop-blur-sm">
+                    Tìm hiểu thêm
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-slate-400 hover:text-white">
+                <i class="fa-solid fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="border-y border-white/10 bg-slate-900/50 backdrop-blur-sm relative z-20 -mt-20 mx-4 md:mx-auto max-w-5xl rounded-xl glass-card shadow-2xl">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 px-4 text-center">
+            <div class="animate-scroll">
+                <div class="text-3xl font-bold text-indigo-400">4h+</div>
+                <div class="text-sm text-slate-400 mt-1">Thực hành chuyên sâu</div>
+            </div>
+            <div class="animate-scroll" style="transition-delay: 0.1s;">
+                <div class="text-3xl font-bold text-purple-400">3</div>
+                <div class="text-sm text-slate-400 mt-1">Diễn giả hàng đầu</div>
+            </div>
+            <div class="animate-scroll" style="transition-delay: 0.2s;">
+                <div class="text-3xl font-bold text-pink-400">100+</div>
+                <div class="text-sm text-slate-400 mt-1">Người tham dự</div>
+            </div>
+            <div class="animate-scroll" style="transition-delay: 0.3s;">
+                <div class="text-3xl font-bold text-teal-400">100%</div>
+                <div class="text-sm text-slate-400 mt-1">Ứng dụng thực tế</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Tại sao bạn nên tham gia?</h2>
+                <div class="w-20 h-1 bg-indigo-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-card p-8 rounded-2xl hover-scale animate-scroll">
+                    <div class="w-14 h-14 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-rocket text-indigo-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Tăng tốc độ làm việc</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        Học cách sử dụng AI để tự động hóa các tác vụ lặp lại, viết nội dung và xử lý dữ liệu nhanh gấp 10 lần.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-8 rounded-2xl hover-scale animate-scroll" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Sáng tạo không giới hạn</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        Làm chủ Midjourney và DALL-E để tạo ra hình ảnh, thiết kế ấn tượng mà không cần kỹ năng đồ họa chuyên sâu.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-8 rounded-2xl hover-scale animate-scroll" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-network-wired text-pink-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Cập nhật xu hướng</h3>
+                    <p class="text-slate-400 leading-relaxed">
+                        Nắm bắt các công cụ mới nhất năm 2025 và cách tích hợp chúng vào quy trình doanh nghiệp của bạn.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Topics Section -->
+    <section id="topics" class="py-20 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 animate-scroll">Nội dung Workshop</h2>
+                    <p class="text-slate-400 mb-8 text-lg animate-scroll" style="transition-delay: 0.1s;">
+                        Chương trình được thiết kế cô đọng, tập trung vào thực hành (Hands-on) để bạn có thể áp dụng ngay lập tức.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start animate-scroll">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mt-1">1</div>
+                            <div class="ml-4">
+                                <h4 class="text-xl font-semibold text-white">Tổng quan về Generative AI</h4>
+                                <p class="text-slate-400 mt-1">Cơ chế hoạt động của LLM và Prompt Engineering cơ bản.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start animate-scroll" style="transition-delay: 0.1s;">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold mt-1">2</div>
+                            <div class="ml-4">
+                                <h4 class="text-xl font-semibold text-white">AI cho Content & Marketing</h4>
+                                <p class="text-slate-400 mt-1">Xây dựng chiến lược nội dung tự động với ChatGPT/Claude.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start animate-scroll" style="transition-delay: 0.2s;">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold mt-1">3</div>
+                            <div class="ml-4">
+                                <h4 class="text-xl font-semibold text-white">AI cho Hình ảnh & Design</h4>
+                                <p class="text-slate-400 mt-1">Thực hành Midjourney: Từ ý tưởng đến tác phẩm nghệ thuật.</p>
+                            </div>
+                        </div>
+                         <div class="flex items-start animate-scroll" style="transition-delay: 0.3s;">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white font-bold mt-1">4</div>
+                            <div class="ml-4">
+                                <h4 class="text-xl font-semibold text-white">Thảo luận & Q&A</h4>
+                                <p class="text-slate-400 mt-1">Giải đáp thắc mắc và định hướng ứng dụng cho doanh nghiệp.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 animate-scroll" style="transition-delay: 0.4s;">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop" alt="AI Robot working" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-80"></div>
+                        <div class="absolute bottom-6 left-6 right-6">
+                            <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                                <p class="font-mono text-indigo-300 text-sm mb-1">>_ Generating future...</p>
+                                <p class="text-white italic">"AI sẽ không thay thế bạn. Người biết sử dụng AI sẽ thay thế người không biết."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speakers Section -->
+    <section id="speakers" class="py-20 bg-slate-900 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Diễn Giả Đồng Hành</h2>
+                <p class="text-slate-400">Gặp gỡ những chuyên gia đi đầu trong lĩnh vực AI</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Speaker 1 (Tai - Đã đặt tên nổi bật) -->
+                <div class="glass-card rounded-xl overflow-hidden group animate-scroll">
+                    <div class="h-64 overflow-hidden relative">
+                           <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop" alt="Nguyễn Mạnh Tài" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+                           <div class="absolute inset-0 bg-indigo-900/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold text-white">Nguyễn Mạnh Tài</h3>
+                        <p class="text-indigo-400 text-sm font-medium mb-4">Chuyên gia AI & Web Dev</p>
+                        <p class="text-slate-400 text-sm mb-4">Sinh viên FPT Polytechnic, có kinh nghiệm thực chiến trong phát triển ứng dụng AI.</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="https://facebook.com/Tizsosad07" target="_blank" class="text-slate-400 hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="mailto:tainmpk04523@gmail.com" class="text-slate-400 hover:text-white"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker 2 -->
+                <div class="glass-card rounded-xl overflow-hidden group animate-scroll" style="transition-delay: 0.1s;">
+                    <div class="h-64 overflow-hidden relative">
+                           <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop" alt="Speaker 2" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+                           <div class="absolute inset-0 bg-indigo-900/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold text-white">Trần Thị B</h3>
+                        <p class="text-indigo-400 text-sm font-medium mb-4">Creative Director</p>
+                        <p class="text-slate-400 text-sm mb-4">Chuyên gia sử dụng Generative AI trong thiết kế đồ họa và sáng tạo nội dung số.</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-slate-400 hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-white"><i class="fa-brands fa-dribbble"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker 3 -->
+                <div class="glass-card rounded-xl overflow-hidden group animate-scroll" style="transition-delay: 0.2s;">
+                    <div class="h-64 overflow-hidden relative">
+                           <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop" alt="Speaker 3" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-110">
+                           <div class="absolute inset-0 bg-indigo-900/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold text-white">Lê Hoàng C</h3>
+                        <p class="text-indigo-400 text-sm font-medium mb-4">Founder @AIStartup</p>
+                        <p class="text-slate-400 text-sm mb-4">Nhà sáng lập giải pháp Automation Marketing sử dụng công nghệ AI tiên tiến.</p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-slate-400 hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-white"><i class="fa-solid fa-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="register" class="py-20 relative bg-cover bg-center bg-slate-950">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl border border-indigo-500/30 animate-scroll">
+                <div class="text-center mb-10">
+                    <span class="text-indigo-400 font-bold tracking-wider uppercase text-sm">Số lượng có hạn</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4">Đăng Ký Tham Gia Ngay</h2>
+                    <p class="text-slate-300">Điền thông tin bên dưới để giữ chỗ. Chúng tôi sẽ gửi vé mời qua email.</p>
+                </div>
+
+                <form id="registrationForm" onsubmit="handleRegister(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Họ và tên</label>
+                            <input type="text" id="name" required class="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition" placeholder="Nguyễn Văn A">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                            <input type="email" id="email" required class="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition" placeholder="email@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-slate-300 mb-2">Số điện thoại</label>
+                            <input type="tel" id="phone" required class="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition" placeholder="09xxxxxxx">
+                        </div>
+                        <div>
+                            <label for="job" class="block text-sm font-medium text-slate-300 mb-2">Nghề nghiệp / Công ty</label>
+                            <input type="text" id="job" class="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition" placeholder="Developer / Freelancer...">
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg shadow-indigo-500/30 transition-all transform hover:scale-[1.01] focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-slate-900">
+                            Xác nhận Đăng ký
+                        </button>
+                    </div>
+                    <p class="text-center text-xs text-slate-500 mt-4">
+                        * Bằng việc đăng ký, bạn đồng ý nhận thông tin cập nhật về sự kiện.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-brain text-indigo-400 text-2xl"></i>
+                        <span class="font-bold text-xl text-white">Generative AI Workshop</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Chuyên trang sự kiện công nghệ và workshop đào tạo kỹ năng AI thực chiến.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-4">Nội dung</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#about" class="hover:text-indigo-400 transition">Giới thiệu</a></li>
+                        <li><a href="#topics" class="hover:text-indigo-400 transition">Chủ đề</a></li>
+                        <li><a href="#speakers" class="hover:text-indigo-400 transition">Diễn giả</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Liên hệ</h4>
+                    <!-- Thông tin cá nhân của Tai (Đã thêm) -->
+                    <ul class="space-y-2 text-sm">
+                        <li><i class="fa-solid fa-envelope mr-2"></i> tainmpk04523@gmail.com</li>
+                        <li><i class="fa-solid fa-phone mr-2"></i> 0913355387</li>
+                        <li><i class="fa-solid fa-location-dot mr-2"></i> 163, Tổ Dân Phố Toàn Thắng, Cưmgar, BMT</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Theo dõi</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://facebook.com/Tizsosad07" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 text-center text-sm text-slate-500">
+                <p>&copy; 2025 FPT Polytechnic. Tác giả: <span class="font-bold text-white">Tai</span>. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.querySelector('#mobile-icon'); // Sử dụng ID để target chính xác
+            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                 if (icon) {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                }
+            } else {
+                 if (icon) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                }
+            }
+        }
+
+        // Handle Registration Form Submission
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // Simulation of API call/Formspree logic
+            console.log('Registration submitted:', { name, email });
+
+            const button = e.target.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Đăng ký thành công!';
+            button.classList.add('bg-green-600', 'hover:bg-green-700');
+            button.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            
+            setTimeout(() => {
+                alert(`Cảm ơn ${name}! Bạn đã đăng ký Workshop thành công. Vui lòng kiểm tra email.`);
+                document.getElementById('registrationForm').reset();
+                // Khôi phục nút
+                button.innerHTML = 'Xác nhận Đăng ký';
+                button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                button.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            }, 1000);
+        }
+
+        // JavaScript for smooth scroll on internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId.length > 1) {
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for Animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-scroll, .glass-card').forEach(el => {
+                el.classList.add('animate-scroll'); // Thêm class base
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
