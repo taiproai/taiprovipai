@@ -732,7 +732,7 @@
                     <form id="contact-form" action="https://formspree.io/f/myzqjzbj" method="POST" class="space-y-4">
                         <div>
                             <label class="block text-slate-600 dark:text-gray-400 text-sm mb-2">Họ và Tên</label>
-                            <input type="text" name="name" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500" placeholder="Nguyễn Văn A" required>
+                            <input type="text" name="name" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500" required>
                         </div>
                         <div>
                             <label class="block text-slate-600 dark:text-gray-400 text-sm mb-2">Email</label>
@@ -740,7 +740,7 @@
                         </div>
                         <div>
                             <label class="block text-slate-600 dark:text-gray-400 text-sm mb-2">Lời nhắn</label>
-                            <textarea id="contact-message" name="message" rows="4" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500" placeholder="Nội dung..." required></textarea>
+                            <textarea id="contact-message" name="message" rows="4" class="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500" required></textarea>
                         </div>
                         <button type="submit" id="contact-submit-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 rounded hover:opacity-90 transition transform hover:scale-[1.02]">Gửi Tin Nhắn</button>
                     </form>
@@ -928,7 +928,7 @@
         import { getFirestore, doc, runTransaction, onSnapshot, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? initialAuthToken : null;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-ai-app';
         
         let db, auth;
